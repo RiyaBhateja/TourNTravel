@@ -325,6 +325,15 @@ const app = {
                 </div>
             `;
         }
+
+        // Add Finalize Button
+        timeline.innerHTML += `
+            <div style="margin-top: 30px; text-align: center;">
+                <button class="btn-primary btn-large" onclick="app.navigateTo('final-view')" style="width: 100%;">
+                    <i class="fa-solid fa-check-double"></i> Confirm & Finalize Trip
+                </button>
+            </div>
+        `;
     },
 
     // New Features Logic

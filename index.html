@@ -218,6 +218,32 @@
                 </div>
             </div>
         </section>
+
+        <!-- Final Confirmation View -->
+        <section id="final-view" class="view">
+            <div class="final-container">
+                <div class="glass-card confirmation-card">
+                    <div class="success-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h2>Trip Confirmed!</h2>
+                    <p>Your dynamic itinerary has been securely generated and synced.</p>
+                    <div class="boarding-pass">
+                        <div class="pass-row">
+                            <span class="small-text">Status</span>
+                            <strong><i class="fa-solid fa-lock" style="color: var(--primary);"></i> Encrypted & Secured</strong>
+                        </div>
+                        <div class="pass-row">
+                            <span class="small-text">Engine Sync</span>
+                            <strong><i class="fa-solid fa-cloud-arrow-up" style="color: var(--primary);"></i> Active</strong>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-large" onclick="app.navigateTo('hero-view')" style="margin-top: 24px; width: 100%;">
+                        <i class="fa-solid fa-house"></i> Return Home
+                    </button>
+                </div>
+            </div>
+        </section>
         
         <!-- Loading State -->
         <div id="loading-overlay">
