@@ -227,18 +227,62 @@ const app = {
             `;
         }
 
+        const packageOptions = document.getElementById('package-options');
+        
+        if (packageOptions && timeline) {
+            timeline.style.display = 'none';
+            packageOptions.style.display = 'flex';
+            packageOptions.innerHTML = `
+                <div class="package-card" onclick="app.selectItinerary('balanced', ${days}, '${dest.replace(/'/g, "\\'")}', this)">
+                    <h4><i class="fa-solid fa-scale-balanced"></i> Balanced Explorer</h4>
+                    <p>Perfect mix of culture, leisure, and popular sights. Ideal pace.</p>
+                </div>
+                <div class="package-card" onclick="app.selectItinerary('fast', ${days}, '${dest.replace(/'/g, "\\'")}', this)">
+                    <h4><i class="fa-solid fa-bolt"></i> Fast-Paced</h4>
+                    <p>Action-packed. See as much as possible, rest later.</p>
+                </div>
+                <div class="package-card" onclick="app.selectItinerary('relaxed', ${days}, '${dest.replace(/'/g, "\\'")}', this)">
+                    <h4><i class="fa-solid fa-mug-hot"></i> Relaxed Nomad</h4>
+                    <p>Late mornings, slow afternoons, and deep cultural immersion.</p>
+                </div>
+            `;
+        }
+    },
+
+    selectItinerary(type, days, dest, element) {
+        document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+        if (element) element.classList.add('selected');
+
+        const timeline = document.getElementById('itinerary-timeline');
+        timeline.style.display = 'block';
+        timeline.innerHTML = ''; // clear existing
+
+        let paceText = 'Exploration';
+        let morningText = 'Morning: Artisan Cafe & City Walk';
+        let afternoonText = 'Afternoon: Primary Landmarks';
+        
+        if (type === 'fast') {
+            paceText = 'High-Speed Tour';
+            morningText = 'Early Morning: 3 Major Sights';
+            afternoonText = 'Afternoon: Museum Hopping';
+        } else if (type === 'relaxed') {
+            paceText = 'Slow Living';
+            morningText = 'Late Morning: Brunch & Neighborhood Stroll';
+            afternoonText = 'Afternoon: Park Picnic & Local Shops';
+        }
+
         for(let i = 1; i <= Math.min(days, 5); i++) {
-            // Cap at 5 days for mock UI brevity
             timeline.innerHTML += `
                 <div class="timeline-item">
                     <div class="day-marker">D${i}</div>
                     <div class="day-content">
-                        <h4>Day ${i}: ${i===1 ? 'Arrival & Acclimation' : 'Exploration'}</h4>
+                        <h4>Day ${i}: ${i===1 ? 'Arrival & Acclimation' : paceText}</h4>
                         <div class="activity">
                             <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=150&q=80" alt="Cafe" class="activity-img">
                             <div style="flex: 1;">
-                                <strong>Morning: Artisan Cafe</strong>
-                                <p class="small-text">Local cafe breakfast and introductory city walk.</p>
+                                <strong>${morningText}</strong>
+                                <p class="small-text">Engine matched with highly-rated spots.</p>
+                                ${type === 'balanced' && i === 1 ? `
                                 <button class="btn-ghost btn-small" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
                                     <i class="fa-solid fa-utensils"></i> View Menu
                                 </button>
@@ -250,14 +294,20 @@ const app = {
                                         <li><span>House Pastry</span> <span>$4</span></li>
                                     </ul>
                                 </div>
+                                ` : ''}
                             </div>
                         </div>
                         <div class="activity">
                             <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=150&q=80" alt="Landmark" class="activity-img">
                             <div style="flex: 1;">
-                                <strong>Afternoon: Landmarks</strong>
-                                <p class="small-text">Visit to primary cultural landmarks.</p>
+                                <strong>${afternoonText}</strong>
+                                <p class="small-text">Optimized route to avoid traffic.</p>
                             </div>
+                        </div>
+                        <!-- Nearby Places Suggestion Module -->
+                        <div class="nearby-places">
+                            <strong><i class="fa-solid fa-clock"></i> Got extra time? Nearby:</strong>
+                            <p style="margin-top: 4px; margin-bottom: 0; color: var(--text-main);">Local boutique market (5 min walk), Scenic river viewpoint (10 min walk)</p>
                         </div>
                     </div>
                 </div>
@@ -270,7 +320,7 @@ const app = {
                     <div class="day-marker"><i class="fa-solid fa-ellipsis"></i></div>
                     <div class="day-content">
                         <h4>Remaining ${days - 5} Days</h4>
-                        <p class="small-text">Engine is dynamically adjusting schedule based on real-time factors...</p>
+                        <p class="small-text">Dynamic suggestions will be unlocked closer to dates.</p>
                     </div>
                 </div>
             `;
