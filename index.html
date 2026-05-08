@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TourNTravel - Dynamic Trip Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="app.navigateTo('hero-view')">
+                <i class="fa-solid fa-plane-departure"></i>
+                <span>TourNTravel</span>
+            </div>
+            <div class="nav-links">
+                <button class="btn-ghost" onclick="app.navigateTo('hero-view')">Home</button>
+                <button class="btn-primary" onclick="app.navigateTo('planner-view')">Plan Trip</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main id="app-content">
+        
+        <!-- Hero View -->
+        <section id="hero-view" class="view active">
+            <div class="hero-content">
+                <span class="badge">Next-Gen Travel Engine</span>
+                <h1>Discover the world with <br><span class="text-gradient">dynamic planning</span></h1>
+                <p>Experience real-time trip adjustments, personalized constraints, and intelligent destination matching tailored just for you.</p>
+                <button class="btn-primary btn-large" onclick="app.navigateTo('planner-view')">
+                    Start Your Journey <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="hero-graphics">
+                <div class="glass-card floating-1">
+                    <i class="fa-solid fa-temperature-half"></i>
+                    <div>
+                        <p class="small-text">Real-time Alert</p>
+                        <p class="bold-text">Weather clear in Bali</p>
+                    </div>
+                </div>
+                <div class="glass-card floating-2">
+                    <i class="fa-solid fa-route"></i>
+                    <div>
+                        <p class="small-text">Dynamic Route</p>
+                        <p class="bold-text">Avoiding traffic on Route 66</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Planner View -->
+        <section id="planner-view" class="view">
+            <div class="planner-container">
+                <div class="planner-header">
+                    <h2>Design Your Perfect Trip</h2>
+                    <p>Tell us your preferences, and our engine will craft a tailored itinerary.</p>
+                </div>
+                
+                <form id="trip-form" onsubmit="app.generateTrip(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-location-dot"></i> Dream Destination</label>
+                            <input type="text" id="destination" placeholder="e.g., Tokyo, Japan" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fa-regular fa-calendar"></i> Duration (Days)</label>
+                            <input type="number" id="duration" min="1" max="30" value="7" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-wallet"></i> Budget Level</label>
+                            <select id="budget">
+                                <option value="budget">Backpacker ($)</option>
+                                <option value="moderate" selected>Comfort ($$)</option>
+                                <option value="luxury">Luxury ($$$)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-person-walking-luggage"></i> Travel Style</label>
+                            <select id="style">
+                                <option value="adventure">Adventure & Outdoors</option>
+                                <option value="culture">Culture & History</option>
+                                <option value="relax">Relaxation & Wellness</option>
+                                <option value="nomad">Digital Nomad / Workation</option>
+                                <option value="business">Business Trip</option>
+                                <option value="weekend">Quick Weekend Escape</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-sack-dollar"></i> Max Budget ($)</label>
+                            <input type="number" id="max-budget" min="50" step="50" placeholder="e.g., 2000" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-train"></i> Way to Commute</label>
+                            <select id="commute">
+                                <option value="public">Public Transit</option>
+                                <option value="car">Rental Car</option>
+                                <option value="rideshare">Rideshare / Taxi</option>
+                                <option value="walk">Walking & Biking</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group full-width">
+                            <label><i class="fa-solid fa-utensils"></i> Lifestyle & Dietary</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-label"><input type="checkbox" value="vegan" class="constraint-chk"> Vegan Options</label>
+                                <label class="checkbox-label"><input type="checkbox" value="wheelchair" class="constraint-chk"> Wheelchair Accessible</label>
+                                <label class="checkbox-label"><input type="checkbox" value="pets" class="constraint-chk"> Pet Friendly</label>
+                                <label class="checkbox-label"><input type="checkbox" value="noflights" class="constraint-chk"> Avoid Flights</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group full-width" style="margin-top: 10px;">
+                            <label><i class="fa-solid fa-shield-halved"></i> Cybersecurity & Privacy</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-label"><input type="checkbox" value="vpn" class="constraint-chk"> VPN Friendly Networks</label>
+                                <label class="checkbox-label"><input type="checkbox" value="nowifi" class="constraint-chk"> Avoid Public Wi-Fi Zones</label>
+                                <label class="checkbox-label"><input type="checkbox" value="gdpr" class="constraint-chk"> Strict Data Privacy</label>
+                                <label class="checkbox-label"><input type="checkbox" value="crypto" class="constraint-chk"> Crypto-Friendly Areas</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary btn-submit">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Itinerary
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dashboard View -->
+        <section id="dashboard-view" class="view">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <div>
+                        <h2 id="dash-title">Your Trip to Tokyo</h2>
+                        <p id="dash-subtitle">7 Days • Comfort • Culture & History</p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn-ghost" onclick="app.downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Export</button>
+                        <button class="btn-ghost" onclick="app.syncCalendar()"><i class="fa-solid fa-calendar-plus"></i> Sync</button>
+                        <button class="btn-ghost" onclick="app.navigateTo('planner-view')"><i class="fa-solid fa-pen"></i> Edit</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="left-column" style="display: flex; flex-direction: column; gap: 32px;">
+                        <!-- Real Time Challenges Panel -->
+                        <div class="panel alerts-panel">
+                            <h3><i class="fa-solid fa-bolt"></i> Real-Time Engine</h3>
+                            <div class="alert-list" id="alerts-list">
+                                <!-- Dynamic alerts will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Logistics Panel -->
+                        <div class="panel budget-panel">
+                            <h3><i class="fa-solid fa-calculator"></i> Logistics Plan</h3>
+                            <div id="logistics-content" style="display: flex; flex-direction: column; gap: 16px;">
+                                <!-- Budget and Commute info here -->
+                            </div>
+                            
+                            <!-- Expense Input -->
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <p class="small-text" style="margin-bottom: 8px;">Log Real-Time Expense</p>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="number" id="expense-input" placeholder="Amount ($)" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: rgba(15,23,42,0.6); color: white;">
+                                    <button type="button" class="btn-primary" onclick="app.logExpense()" style="padding: 8px 16px;">Add</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cultural Cheat Sheet -->
+                        <div class="panel culture-panel">
+                            <h3><i class="fa-solid fa-book-open-reader"></i> Local Etiquette</h3>
+                            <div id="culture-content">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Itinerary Panel -->
+                    <div class="panel itinerary-panel">
+                        <h3><i class="fa-solid fa-map-location-dot"></i> Dynamic Itinerary</h3>
+                        
+                        <!-- Map Container -->
+                        <div id="map-container" style="height: 250px; width: 100%; border-radius: 12px; margin-bottom: 24px; border: 1px solid var(--border); z-index: 1;"></div>
+
+                        <div class="timeline" id="itinerary-timeline">
+                            <!-- Dynamic itinerary will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Loading State -->
+        <div id="loading-overlay">
+            <div class="loader">
+                <div class="spinner"></div>
+                <p>Engine calculating optimal routes...</p>
+            </div>
+        </div>
+
+        <!-- Chatbot Widget -->
+        <div id="chat-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
+            <button id="chat-toggle" onclick="app.toggleChat()" style="width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.5rem; box-shadow: 0 4px 14px var(--primary-glow); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                <i class="fa-solid fa-robot"></i>
+            </button>
+            <div id="chat-window" class="glass-card" style="display: none; position: absolute; bottom: 80px; right: 0; width: 320px; height: 400px; flex-direction: column; padding: 0; overflow: hidden; border: 1px solid var(--primary-glow);">
+                <div style="background: rgba(15, 23, 42, 0.9); padding: 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <h4 style="margin: 0; font-family: var(--font-heading);"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> Engine AI</h4>
+                    <button onclick="app.toggleChat()" style="background: none; border: none; color: white; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="chat-messages" style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;">
+                    <div style="background: rgba(59, 130, 246, 0.2); padding: 12px; border-radius: 12px 12px 12px 0; max-width: 80%; align-self: flex-start; border: 1px solid rgba(59,130,246,0.3);">
+                        <p style="font-size: 0.9rem; margin: 0;">Hi! I'm your real-time travel assistant. Need to alter the trip or find something nearby?</p>
+                    </div>
+                </div>
+                <div style="padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: rgba(15, 23, 42, 0.6);">
+                    <input type="text" id="chat-input" placeholder="Ask me anything..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; outline: none;">
+                    <button onclick="app.sendChatMessage()" class="btn-primary" style="padding: 10px 16px; border-radius: 8px;"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW setup failed'));
+            });
+        }
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
