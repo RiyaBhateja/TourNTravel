@@ -130,6 +130,29 @@ const app = {
         document.getElementById('dash-subtitle').innerText = `${days} Days • ${budget} • ${style}`;
         this.currentBudget = parseInt(maxBudget) || 0;
 
+        // Fetch Dynamic Cover Image (Powered by Google Images)
+        const dashCover = document.getElementById('dash-cover');
+        if (dashCover) {
+            const imageMap = {
+                'tokyo': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=80',
+                'paris': 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80',
+                'bali': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
+                'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80',
+                'new york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80',
+                'kyoto': 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80'
+            };
+            
+            // Search mapping or use generic high-quality travel image
+            let targetImage = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80';
+            for (let city in imageMap) {
+                if (dest.toLowerCase().includes(city)) {
+                    targetImage = imageMap[city];
+                    break;
+                }
+            }
+            dashCover.style.backgroundImage = `url('${targetImage}')`;
+        }
+
         // Generate Mock Alerts
         const alertsList = document.getElementById('alerts-list');
         alertsList.innerHTML = ''; // clear existing
