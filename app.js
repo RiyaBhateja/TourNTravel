@@ -95,41 +95,39 @@ const app = {
         e.preventDefault();
         
         // Get form data
-        const destination = document.getElementById('destination').value;
-        const duration = document.getElementById('duration').value;
-        const budget = document.getElementById('budget').options[document.getElementById('budget').selectedIndex].text;
-        const style = document.getElementById('style').options[document.getElementById('style').selectedIndex].text;
-        const maxBudget = document.getElementById('max-budget').value;
-        const commute = document.getElementById('commute').options[document.getElementById('commute').selectedIndex].text;
+        const startPoint = document.getElementById('start-point').value;
+        const dest = document.getElementById('destination').value;
+        const days = parseInt(document.getElementById('duration').value);
+        const maxBudget = parseInt(document.getElementById('max-budget').value);
+        const commute = document.getElementById('commute').value;
         
-        const constraints = Array.from(document.querySelectorAll('.constraint-chk:checked'))
-                                .map(cb => cb.parentElement.innerText.trim());
+        const constraints = Array.from(document.querySelectorAll('.constraint-chk:checked')).map(cb => cb.value);
+        const tripStyle = document.querySelector('input[name="style"]:checked').value;
 
-        // Show Loading State
-        const loader = document.getElementById('loading-overlay');
+        // Simulate Secure Data Processing
         const loaderText = document.getElementById('loader-text');
+        const loader = document.getElementById('loading-overlay');
         loader.style.display = 'flex';
+        loaderText.innerText = 'Initializing Secure Protocol...';
         
-        // Security Data Protection UI
-        if(loaderText) loaderText.innerText = "Encrypting Data Payload...";
-
-        // Simulate secure API call and Engine processing
         setTimeout(() => {
-            if(loaderText) loaderText.innerText = "Engine calculating optimal routes...";
-        }, 1200);
-
-        setTimeout(() => {
-            loader.style.display = 'none';
-            this.populateDashboard(destination, duration, budget, style, constraints, maxBudget, commute);
-            this.navigateTo('dashboard-view');
-        }, 2500);
+            loaderText.innerText = 'Applying End-to-End Encryption...';
+            setTimeout(() => {
+                loaderText.innerText = 'Calculating Optimal Commute Routes...';
+                setTimeout(() => {
+                    this.populateDashboard(dest, days, maxBudget, commute, constraints, tripStyle, startPoint);
+                    this.navigateTo('dashboard-view');
+                    loader.style.display = 'none';
+                }, 1000);
+            }, 1000);
+        }, 800);
     },
 
     // Render the dashboard data
-    populateDashboard(dest, days, budget, style, constraints, maxBudget, commute) {
+    populateDashboard(dest, days, maxBudget, commute, constraints, tripStyle, startPoint) {
         // Update Headers
         document.getElementById('dash-title').innerText = `Your Trip to ${dest}`;
-        document.getElementById('dash-subtitle').innerText = `${days} Days • ${budget} • ${style}`;
+        document.getElementById('dash-subtitle').innerText = `${days} Days • ${tripStyle} • ${commute} from ${startPoint}`;
         this.currentBudget = parseInt(maxBudget) || 0;
 
         // Fetch Dynamic Cover Image (Powered by Google Images)
@@ -175,9 +173,18 @@ const app = {
         if (logisticsPanel) {
             let dailyBudget = EngineLogic.calculateDailyBudget(maxBudget, days) || 'N/A';
             logisticsPanel.innerHTML = `
-                <div class="logistics-item" style="display: flex; gap: 12px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
+                <div class="logistics-item" style="display: flex; gap: 12px; align-items: center;">
                     <div style="background: rgba(59, 130, 246, 0.2); padding: 10px; border-radius: 8px; color: var(--primary);">
-                        <i class="fa-solid fa-money-bill-wave"></i>
+                        <i class="fa-solid fa-location-arrow"></i>
+                    </div>
+                    <div>
+                        <p class="small-text">Starting Location</p>
+                        <strong>${startPoint || 'Not specified'}</strong>
+                    </div>
+                </div>
+                <div class="logistics-item" style="display: flex; gap: 12px; align-items: center;">
+                    <div style="background: rgba(16, 185, 129, 0.2); padding: 10px; border-radius: 8px; color: var(--secondary);">
+                        <i class="fa-solid fa-sack-dollar"></i>
                     </div>
                     <div>
                         <p class="small-text">Total Budget Limit</p>
@@ -213,10 +220,17 @@ const app = {
             `;
         }
 
-        // Initialize Map (Google Maps Embed)
+        // Initialize Map (Google Maps Embed with Directions)
         const mapContainer = document.getElementById('map-container');
         if (mapContainer) {
             const encodedDest = encodeURIComponent(dest);
+            const encodedStart = encodeURIComponent(startPoint || '');
+            
+            // If startPoint exists, show directions. Otherwise, show destination search.
+            const mapSrc = startPoint 
+                ? `https://maps.google.com/maps?saddr=${encodedStart}&daddr=${encodedDest}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+                : `https://maps.google.com/maps?q=${encodedDest}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+
             mapContainer.innerHTML = `
                 <iframe 
                     width="100%" 
@@ -224,7 +238,7 @@ const app = {
                     style="border:0; border-radius: 12px;" 
                     loading="lazy" 
                     allowfullscreen 
-                    src="https://maps.google.com/maps?q=${encodedDest}&t=&z=13&ie=UTF8&iwloc=&output=embed">
+                    src="${mapSrc}">
                 </iframe>
             `;
         }

@@ -69,7 +69,12 @@
                 <form id="trip-form" onsubmit="app.generateTrip(event)">
                     <div class="form-grid">
                         <div class="input-group">
-                            <label for="destination"><i class="fa-solid fa-location-dot"></i> Dream Destination</label>
+                            <label for="start-point"><i class="fa-solid fa-location-arrow"></i> Starting Point</label>
+                            <input type="text" id="start-point" placeholder="e.g., Hotel, Airport, or Station" required aria-label="Starting Point">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="destination"><i class="fa-solid fa-location-dot"></i> Destination</label>
                             <input type="text" id="destination" placeholder="e.g., Tokyo, Japan" required>
                         </div>
                         
