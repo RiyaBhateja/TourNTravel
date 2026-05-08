@@ -478,6 +478,49 @@ input:focus, select:focus {
     margin-top: 4px;
 }
 
+.activity-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 12px;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+}
+
+.menu-card {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.menu-card h5 {
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.menu-card ul {
+    list-style: none;
+}
+
+.menu-card li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding: 4px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+.menu-card li:last-child {
+    border-bottom: none;
+}
+
 /* Loading Overlay */
 #loading-overlay {
     position: fixed;

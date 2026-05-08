@@ -181,16 +181,27 @@ const app = {
                     <div class="day-content">
                         <h4>Day ${i}: ${i===1 ? 'Arrival & Acclimation' : 'Exploration'}</h4>
                         <div class="activity">
-                            <i class="fa-solid fa-mug-hot"></i>
-                            <div>
-                                <strong>Morning</strong>
+                            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=150&q=80" alt="Cafe" class="activity-img">
+                            <div style="flex: 1;">
+                                <strong>Morning: Artisan Cafe</strong>
                                 <p class="small-text">Local cafe breakfast and introductory city walk.</p>
+                                <button class="btn-ghost btn-small" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                                    <i class="fa-solid fa-utensils"></i> View Menu
+                                </button>
+                                <div class="menu-card" style="display: none; margin-top: 10px;">
+                                    <h5>Today's Menu</h5>
+                                    <ul>
+                                        <li><span>Avocado Toast</span> <span>$12</span></li>
+                                        <li><span>Matcha Latte</span> <span>$5</span></li>
+                                        <li><span>House Pastry</span> <span>$4</span></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="activity">
-                            <i class="fa-solid fa-camera"></i>
-                            <div>
-                                <strong>Afternoon</strong>
+                            <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=150&q=80" alt="Landmark" class="activity-img">
+                            <div style="flex: 1;">
+                                <strong>Afternoon: Landmarks</strong>
                                 <p class="small-text">Visit to primary cultural landmarks.</p>
                             </div>
                         </div>
