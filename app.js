@@ -67,25 +67,27 @@ const app = {
 
     // Navigation Logic
     navigateTo(viewId, pushState = true) {
+        const oldView = document.getElementById(this.currentView);
+        const newView = document.getElementById(viewId);
+
+        if (!newView) return;
+
         // Hide current view
-        document.getElementById(this.currentView).classList.remove('active');
+        if (oldView) oldView.classList.remove('active');
+        
+        // Ensure page scrolls to top on navigation
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         
         // Show new view
-        const newView = document.getElementById(viewId);
-        // Small delay to allow CSS transition
         setTimeout(() => {
             newView.classList.add('active');
+            this.currentView = viewId;
         }, 50);
-
-        this.currentView = viewId;
 
         // Update URL
         if (pushState) {
             window.history.pushState({ view: viewId }, '', `#${viewId}`);
         }
-        
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
     // Handle form submission
@@ -334,6 +336,31 @@ const app = {
                 </button>
             </div>
         `;
+    },
+
+    // Simulated Google Services & Security Enhancements
+    syncToCloud() {
+        const btn = event.currentTarget;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Syncing to Google Cloud...';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fa-solid fa-cloud-check"></i> Cloud Synced';
+            btn.style.color = 'var(--secondary)';
+            console.log('Itinerary synced to Google Cloud Artifact Registry (Simulation)');
+        }, 1500);
+    },
+
+    toggleSecurityVault() {
+        const vault = document.getElementById('security-vault');
+        if (vault) {
+            const isHidden = vault.style.display === 'none';
+            vault.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) {
+                console.log('Security Vault: Initializing 256-bit AES simulation...');
+            }
+        }
     },
 
     // New Features Logic

@@ -735,6 +735,28 @@ input:focus, select:focus {
     font-size: 0.85rem;
 }
 
+/* Security Audit Panel */
+.security-audit-panel {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    transition: all 0.3s ease;
+}
+
+.security-audit-panel:hover {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.audit-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 /* Final Confirmation View */
 .final-container {
     max-width: 600px;

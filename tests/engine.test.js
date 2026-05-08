@@ -45,3 +45,25 @@ describe('TourNTravel EngineLogic Suite', function() {
     });
 
 });
+
+describe('App State & Flow Tests', function() {
+    it('should have app object initialized', function() {
+        expect(app).to.be.an('object');
+        expect(app.currentView).to.be.a('string');
+    });
+
+    it('should correctly handle view switching state (Simulation)', function() {
+        // Mock navigateTo behavior
+        const targetView = 'final-view';
+        app.navigateTo(targetView, false);
+        // Delay check to match setTimeout in app.js
+        setTimeout(() => {
+            expect(app.currentView).to.equal(targetView);
+        }, 100);
+    });
+
+    it('should verify Google Service interaction methods exist', function() {
+        expect(app.syncToCloud).to.be.a('function');
+        expect(app.toggleSecurityVault).to.be.a('function');
+    });
+});

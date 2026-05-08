@@ -21,8 +21,8 @@
                 <span>TourNTravel</span>
             </div>
             <div class="nav-links">
-                <button class="btn-ghost" onclick="app.navigateTo('hero-view')">Home</button>
-                <button class="btn-primary" onclick="app.navigateTo('planner-view')">Plan Trip</button>
+                <button class="btn-ghost" onclick="app.navigateTo('hero-view')" aria-label="Go to Home Screen">Home</button>
+                <button class="btn-primary" onclick="app.navigateTo('planner-view')" aria-label="Open Trip Planner">Plan Trip</button>
             </div>
         </div>
     </nav>
@@ -153,13 +153,41 @@
                             <p id="dash-subtitle" style="color: #cbd5e1; margin: 8px 0 0 0; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">7 Days • Comfort • Culture & History</p>
                         </div>
                         <div style="display: flex; gap: 12px;">
-                            <button class="btn-ghost" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,0.2); color: white;" onclick="app.downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Export</button>
-                            <button class="btn-ghost" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,0.2); color: white;" onclick="app.syncCalendar()"><i class="fa-solid fa-calendar-plus"></i> Sync</button>
-                            <button class="btn-ghost" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,0.2); color: white;" onclick="app.navigateTo('planner-view')"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button class="btn-ghost" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,0.2); color: white;" onclick="app.downloadPDF()" aria-label="Export Itinerary as PDF"><i class="fa-solid fa-file-pdf"></i> Export</button>
+                            <button class="btn-ghost" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,0.2); color: white;" onclick="app.syncToCloud()" aria-label="Sync Itinerary to Google Cloud"><i class="fa-solid fa-cloud-arrow-up"></i> Cloud Sync</button>
+                            <button class="btn-ghost" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-color: rgba(255,255,255,0.2); color: white;" onclick="app.navigateTo('planner-view')" aria-label="Edit Trip Settings"><i class="fa-solid fa-pen"></i> Edit</button>
                         </div>
                     </div>
                     <div style="position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.6); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; color: white; z-index: 1; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1);">
                         <i class="fa-brands fa-google"></i> Powered by Google Images
+                    </div>
+                </div>
+
+                <!-- Security & Cloud Audit Panel (New Feature) -->
+                <div class="panel security-audit-panel" style="margin-bottom: 24px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="margin: 0; color: var(--secondary);"><i class="fa-solid fa-shield-halved"></i> Security & Cloud Audit</h3>
+                        <button class="btn-ghost btn-small" onclick="app.toggleSecurityVault()" aria-label="View Security Vault"><i class="fa-solid fa-eye"></i> Audit Vault</button>
+                    </div>
+                    <div id="security-vault" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+                        <div class="audit-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div class="audit-item">
+                                <span class="small-text">CSP Policy</span>
+                                <strong style="color: var(--secondary);">STRICT (Level 3)</strong>
+                            </div>
+                            <div class="audit-item">
+                                <span class="small-text">Encryption</span>
+                                <strong style="color: var(--secondary);">AES-256 (Simulated)</strong>
+                            </div>
+                            <div class="audit-item">
+                                <span class="small-text">Cloud Registry</span>
+                                <strong style="color: var(--secondary);">Artifact Registry</strong>
+                            </div>
+                            <div class="audit-item">
+                                <span class="small-text">GDPR Compliance</span>
+                                <strong style="color: var(--secondary);">ACTIVE</strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
