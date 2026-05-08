@@ -15,7 +15,7 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
         <div class="nav-container">
             <div class="logo" onclick="app.navigateTo('hero-view')">
                 <i class="fa-solid fa-plane-departure"></i>
@@ -29,7 +29,7 @@
     </nav>
 
     <!-- Main Content Container -->
-    <main id="app-content">
+    <main id="app-content" role="main">
         
         <!-- Hero View -->
         <section id="hero-view" class="view active">
@@ -70,17 +70,17 @@
                 <form id="trip-form" onsubmit="app.generateTrip(event)">
                     <div class="form-grid">
                         <div class="input-group">
-                            <label><i class="fa-solid fa-location-dot"></i> Dream Destination</label>
+                            <label for="destination"><i class="fa-solid fa-location-dot"></i> Dream Destination</label>
                             <input type="text" id="destination" placeholder="e.g., Tokyo, Japan" required>
                         </div>
                         
                         <div class="input-group">
-                            <label><i class="fa-regular fa-calendar"></i> Duration (Days)</label>
+                            <label for="duration"><i class="fa-regular fa-calendar"></i> Duration (Days)</label>
                             <input type="number" id="duration" min="1" max="30" value="7" required>
                         </div>
                         
                         <div class="input-group">
-                            <label><i class="fa-solid fa-wallet"></i> Budget Level</label>
+                            <label for="budget"><i class="fa-solid fa-wallet"></i> Budget Level</label>
                             <select id="budget">
                                 <option value="budget">Backpacker ($)</option>
                                 <option value="moderate" selected>Comfort ($$)</option>
@@ -89,7 +89,7 @@
                         </div>
                         
                         <div class="input-group">
-                            <label><i class="fa-solid fa-person-walking-luggage"></i> Travel Style</label>
+                            <label for="style"><i class="fa-solid fa-person-walking-luggage"></i> Travel Style</label>
                             <select id="style">
                                 <option value="adventure">Adventure & Outdoors</option>
                                 <option value="culture">Culture & History</option>
@@ -101,12 +101,12 @@
                         </div>
 
                         <div class="input-group">
-                            <label><i class="fa-solid fa-sack-dollar"></i> Max Budget ($)</label>
+                            <label for="max-budget"><i class="fa-solid fa-sack-dollar"></i> Max Budget ($)</label>
                             <input type="number" id="max-budget" min="50" step="50" placeholder="e.g., 2000" required>
                         </div>
                         
                         <div class="input-group">
-                            <label><i class="fa-solid fa-train"></i> Way to Commute</label>
+                            <label for="commute"><i class="fa-solid fa-train"></i> Way to Commute</label>
                             <select id="commute">
                                 <option value="public">Public Transit</option>
                                 <option value="car">Rental Car</option>
@@ -159,7 +159,7 @@
                 </div>
 
                 <div class="dashboard-grid">
-                    <div class="left-column" style="display: flex; flex-direction: column; gap: 32px;">
+                    <div class="left-column">
                         <!-- Real Time Challenges Panel -->
                         <div class="panel alerts-panel">
                             <h3><i class="fa-solid fa-bolt"></i> Real-Time Engine</h3>
@@ -171,15 +171,15 @@
                         <!-- Logistics Panel -->
                         <div class="panel budget-panel">
                             <h3><i class="fa-solid fa-calculator"></i> Logistics Plan</h3>
-                            <div id="logistics-content" style="display: flex; flex-direction: column; gap: 16px;">
+                            <div id="logistics-content" class="logistics-content">
                                 <!-- Budget and Commute info here -->
                             </div>
                             
                             <!-- Expense Input -->
-                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <div class="expense-container">
                                 <p class="small-text" style="margin-bottom: 8px;">Log Real-Time Expense</p>
                                 <div style="display: flex; gap: 8px;">
-                                    <input type="number" id="expense-input" placeholder="Amount ($)" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: rgba(15,23,42,0.6); color: white;">
+                                    <input type="number" id="expense-input" class="expense-input" placeholder="Amount ($)" aria-label="Expense Amount">
                                     <button type="button" class="btn-primary" onclick="app.logExpense()" style="padding: 8px 16px;">Add</button>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@
                         <h3><i class="fa-solid fa-map-location-dot"></i> Dynamic Itinerary</h3>
                         
                         <!-- Map Container -->
-                        <div id="map-container" style="height: 250px; width: 100%; border-radius: 12px; margin-bottom: 24px; border: 1px solid var(--border); z-index: 1;"></div>
+                        <div id="map-container" class="map-container"></div>
 
                         <div class="timeline" id="itinerary-timeline">
                             <!-- Dynamic itinerary will be inserted here -->
@@ -218,28 +218,41 @@
         </div>
 
         <!-- Chatbot Widget -->
-        <div id="chat-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
-            <button id="chat-toggle" onclick="app.toggleChat()" style="width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.5rem; box-shadow: 0 4px 14px var(--primary-glow); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+        <div id="chat-widget" class="chat-widget">
+            <button id="chat-toggle" class="chat-toggle" onclick="app.toggleChat()" aria-label="Toggle AI Chat">
                 <i class="fa-solid fa-robot"></i>
             </button>
-            <div id="chat-window" class="glass-card" style="display: none; position: absolute; bottom: 80px; right: 0; width: 320px; height: 400px; flex-direction: column; padding: 0; overflow: hidden; border: 1px solid var(--primary-glow);">
-                <div style="background: rgba(15, 23, 42, 0.9); padding: 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <div id="chat-window" class="chat-window glass-card" style="display: none;">
+                <div class="chat-header">
                     <h4 style="margin: 0; font-family: var(--font-heading);"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> Engine AI</h4>
-                    <button onclick="app.toggleChat()" style="background: none; border: none; color: white; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+                    <button onclick="app.toggleChat()" style="background: none; border: none; color: white; cursor: pointer;" aria-label="Close Chat"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div id="chat-messages" style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;">
-                    <div style="background: rgba(59, 130, 246, 0.2); padding: 12px; border-radius: 12px 12px 12px 0; max-width: 80%; align-self: flex-start; border: 1px solid rgba(59,130,246,0.3);">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="chat-bubble-ai">
                         <p style="font-size: 0.9rem; margin: 0;">Hi! I'm your real-time travel assistant. Need to alter the trip or find something nearby?</p>
                     </div>
                 </div>
-                <div style="padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: rgba(15, 23, 42, 0.6);">
-                    <input type="text" id="chat-input" placeholder="Ask me anything..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; outline: none;">
-                    <button onclick="app.sendChatMessage()" class="btn-primary" style="padding: 10px 16px; border-radius: 8px;"><i class="fa-solid fa-paper-plane"></i></button>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" class="chat-input-field" placeholder="Ask me anything..." aria-label="Chat Message Input">
+                    <button onclick="app.sendChatMessage()" class="btn-primary" style="padding: 10px 16px; border-radius: 8px;" aria-label="Send Message"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
 
     </main>
+
+    <!-- Firebase SDK for Analytics -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+        const firebaseConfig = {
+            projectId: "tourntravel-prototype",
+            appId: "1:1234567890:web:abcdef123456",
+            measurementId: "G-MOCKMOCK12"
+        };
+        const fbApp = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(fbApp);
+    </script>
 
     <script>
         if ('serviceWorker' in navigator) {

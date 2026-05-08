@@ -1,3 +1,34 @@
+const EngineLogic = {
+    calculateDailyBudget(maxBudget, days) {
+        if (!maxBudget || maxBudget <= 0 || !days || days <= 0) return 0;
+        return Math.round(maxBudget / days);
+    },
+    
+    generateAlerts(constraints, style) {
+        const mockAlerts = [
+            { type: 'warning', title: 'High Tourist Traffic', desc: 'Expected heavy crowds at popular landmarks today.' },
+            { type: 'info', title: 'Local Festival', desc: 'A street food festival was detected near your hotel.' }
+        ];
+
+        if (constraints.includes('Vegan Options')) {
+            mockAlerts.push({ type: 'success', title: 'Constraint Met', desc: 'Found 12 highly-rated vegan restaurants nearby.' });
+        }
+        
+        if (constraints.includes('VPN Friendly Networks')) {
+            mockAlerts.push({ type: 'info', title: 'Cybersecurity Guard', desc: 'Hotel and suggested cafes verified for unrestricted VPN traffic.' });
+        }
+
+        if (constraints.includes('Strict Data Privacy')) {
+            mockAlerts.push({ type: 'warning', title: 'Privacy Notice', desc: 'Avoid local SIM vendors requiring biometric registration in this area.' });
+        }
+
+        if (style.includes('Nomad') || style.includes('Business')) {
+            mockAlerts.push({ type: 'success', title: 'Workspace Ready', desc: 'Added 3 high-speed Wi-Fi coworking spaces to your itinerary.' });
+        }
+        return mockAlerts;
+    }
+};
+
 const app = {
     currentView: 'hero-view',
     mapInstance: null,
@@ -83,26 +114,7 @@ const app = {
         const alertsList = document.getElementById('alerts-list');
         alertsList.innerHTML = ''; // clear existing
         
-        const mockAlerts = [
-            { type: 'warning', title: 'High Tourist Traffic', desc: 'Expected heavy crowds at popular landmarks today.' },
-            { type: 'info', title: 'Local Festival', desc: 'A street food festival was detected near your hotel.' }
-        ];
-
-        if (constraints.includes('Vegan Options')) {
-            mockAlerts.push({ type: 'success', title: 'Constraint Met', desc: 'Found 12 highly-rated vegan restaurants nearby.' });
-        }
-        
-        if (constraints.includes('VPN Friendly Networks')) {
-            mockAlerts.push({ type: 'info', title: 'Cybersecurity Guard', desc: 'Hotel and suggested cafes verified for unrestricted VPN traffic.' });
-        }
-
-        if (constraints.includes('Strict Data Privacy')) {
-            mockAlerts.push({ type: 'warning', title: 'Privacy Notice', desc: 'Avoid local SIM vendors requiring biometric registration in this area.' });
-        }
-
-        if (style.includes('Nomad') || style.includes('Business')) {
-            mockAlerts.push({ type: 'success', title: 'Workspace Ready', desc: 'Added 3 high-speed Wi-Fi coworking spaces to your itinerary.' });
-        }
+        const mockAlerts = EngineLogic.generateAlerts(constraints, style);
 
         mockAlerts.forEach(alert => {
             alertsList.innerHTML += `
@@ -116,7 +128,7 @@ const app = {
         // Populate Logistics Panel
         const logisticsPanel = document.getElementById('logistics-content');
         if (logisticsPanel) {
-            let dailyBudget = maxBudget ? Math.round(maxBudget / days) : 'N/A';
+            let dailyBudget = EngineLogic.calculateDailyBudget(maxBudget, days) || 'N/A';
             logisticsPanel.innerHTML = `
                 <div class="logistics-item" style="display: flex; gap: 12px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
                     <div style="background: rgba(59, 130, 246, 0.2); padding: 10px; border-radius: 8px; color: var(--primary);">
@@ -288,7 +300,14 @@ const app = {
     }
 };
 
+// Expose EngineLogic for testing if module object exists
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = { EngineLogic, app };
+}
+
 // Initialize app when DOM loads
-document.addEventListener('DOMContentLoaded', () => {
-    app.init();
-});
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        app.init();
+    });
+}
