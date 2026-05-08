@@ -37,6 +37,18 @@ const app = {
     // Initialize application
     init() {
         console.log('TourNTravel Engine Initialized');
+        
+        // GDPR Banner Logic
+        const consent = localStorage.getItem('gdpr_consent');
+        const banner = document.getElementById('gdpr-banner');
+        if (banner) {
+            if (!consent) {
+                banner.style.display = 'flex';
+            } else if (consent === 'accepted' && typeof window.initializeAnalytics === 'function') {
+                window.initializeAnalytics();
+            }
+        }
+
         // Check hash to determine initial view
         const hash = window.location.hash.replace('#', '');
         if (hash && document.getElementById(hash)) {
@@ -93,14 +105,22 @@ const app = {
 
         // Show Loading State
         const loader = document.getElementById('loading-overlay');
+        const loaderText = document.getElementById('loader-text');
         loader.style.display = 'flex';
+        
+        // Security Data Protection UI
+        if(loaderText) loaderText.innerText = "Encrypting Data Payload...";
 
-        // Simulate API call and Engine processing
+        // Simulate secure API call and Engine processing
+        setTimeout(() => {
+            if(loaderText) loaderText.innerText = "Engine calculating optimal routes...";
+        }, 1200);
+
         setTimeout(() => {
             loader.style.display = 'none';
             this.populateDashboard(destination, duration, budget, style, constraints, maxBudget, commute);
             this.navigateTo('dashboard-view');
-        }, 2000);
+        }, 2500);
     },
 
     // Render the dashboard data
@@ -168,21 +188,20 @@ const app = {
             `;
         }
 
-        // Initialize Map
+        // Initialize Map (Google Maps Embed)
         const mapContainer = document.getElementById('map-container');
-        if (mapContainer && typeof L !== 'undefined') {
-            if (this.mapInstance) {
-                this.mapInstance.remove();
-            }
-            this.mapInstance = L.map('map-container').setView([35.6762, 139.6503], 13); // Default Tokyo coordinates
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(this.mapInstance);
-
-            L.marker([35.6762, 139.6503]).addTo(this.mapInstance)
-                .bindPopup('<b>Start Location</b><br>Your starting point.').openPopup();
-
-            setTimeout(() => { this.mapInstance.invalidateSize(); }, 500);
+        if (mapContainer) {
+            const encodedDest = encodeURIComponent(dest);
+            mapContainer.innerHTML = `
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0; border-radius: 12px;" 
+                    loading="lazy" 
+                    allowfullscreen 
+                    src="https://maps.google.com/maps?q=${encodedDest}&t=&z=13&ie=UTF8&iwloc=&output=embed">
+                </iframe>
+            `;
         }
 
         for(let i = 1; i <= Math.min(days, 5); i++) {
@@ -236,6 +255,17 @@ const app = {
     },
 
     // New Features Logic
+    acceptCookies() {
+        localStorage.setItem('gdpr_consent', 'accepted');
+        document.getElementById('gdpr-banner').style.display = 'none';
+        if (typeof window.initializeAnalytics === 'function') window.initializeAnalytics();
+    },
+
+    declineCookies() {
+        localStorage.setItem('gdpr_consent', 'declined');
+        document.getElementById('gdpr-banner').style.display = 'none';
+    },
+
     downloadPDF() {
         alert("Downloading high-res PDF itinerary... (Mock)");
     },

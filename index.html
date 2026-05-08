@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:;">
     <title>TourNTravel - Dynamic Trip Engine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,8 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -213,7 +212,7 @@
         <div id="loading-overlay">
             <div class="loader">
                 <div class="spinner"></div>
-                <p>Engine calculating optimal routes...</p>
+                <p id="loader-text">Engine calculating optimal routes...</p>
             </div>
         </div>
 
@@ -241,17 +240,31 @@
 
     </main>
 
+    <!-- GDPR Consent Banner -->
+    <div id="gdpr-banner" class="glass-card" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; max-width: 400px; display: none; flex-direction: column; gap: 12px; border: 1px solid var(--primary);">
+        <h4 style="margin: 0; font-family: var(--font-heading);"><i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> Data Protection</h4>
+        <p style="font-size: 0.85rem; margin: 0; color: var(--text-main);">We use Google Firebase Analytics to improve your experience. Your data is processed securely and in compliance with GDPR. Do you consent to performance cookies?</p>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-primary" onclick="app.acceptCookies()" style="flex: 1; padding: 8px; font-size: 0.85rem;">Accept</button>
+            <button class="btn-ghost" onclick="app.declineCookies()" style="flex: 1; padding: 8px; font-size: 0.85rem;">Decline</button>
+        </div>
+    </div>
+
     <!-- Firebase SDK for Analytics -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
-        const firebaseConfig = {
-            projectId: "tourntravel-prototype",
-            appId: "1:1234567890:web:abcdef123456",
-            measurementId: "G-MOCKMOCK12"
+        
+        window.initializeAnalytics = function() {
+            const firebaseConfig = {
+                projectId: "tourntravel-prototype",
+                appId: "1:1234567890:web:abcdef123456",
+                measurementId: "G-MOCKMOCK12"
+            };
+            const fbApp = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(fbApp);
+            console.log("Secure Analytics Initialized via User Consent.");
         };
-        const fbApp = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(fbApp);
     </script>
 
     <script>
